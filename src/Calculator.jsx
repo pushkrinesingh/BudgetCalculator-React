@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdCurrencyRupee } from "react-icons/md";
+import { GiCancel } from "react-icons/gi";
 const Calculator = () => {
   const [incometype, setIncomeType] = useState("");
   const [currency, setCurrency] = useState("");
@@ -59,6 +60,14 @@ const Calculator = () => {
     Filter === "all"
       ? Transaction
       : Transaction.filter((obj) => obj.currencyType === Filter);
+
+  function DeleteTransaction(IdToDelete) {
+    setTransaction(
+      Transaction.filter((obj) => {
+        return obj.id !== IdToDelete;
+      }),
+    );
+  }
 
   return (
     <div className="Container">
@@ -168,6 +177,7 @@ const Calculator = () => {
                   <MdCurrencyRupee />
                   {obj.TransactionAmount.toFixed(2)}
                 </span>
+                <GiCancel onClick={() => DeleteTransaction(obj.id)} className="RemoveBtn" />
               </div>
             );
           })}

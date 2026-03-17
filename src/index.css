@@ -183,13 +183,9 @@ body {
   margin-bottom: 12px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.03);
-  border-left: 4px solid transparent;
-  transition: 0.25s;
-}
-
-.transactionRow:hover {
   border-left: 4px solid #38bdf8;
 }
+
 
 .leftPart {
   display: flex;
@@ -221,7 +217,10 @@ body {
   font-weight: bold;
   font-size: 16px;
 }
-
+.RemoveBtn{
+   color: #ef4444;  
+   font-size: 17px;
+}
 .Transaction_history::-webkit-scrollbar{
   width:8px;
 }
