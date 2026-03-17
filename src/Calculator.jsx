@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdCurrencyRupee } from "react-icons/md";
 const Calculator = () => {
   const [incometype, setIncomeType] = useState("");
@@ -6,19 +6,35 @@ const Calculator = () => {
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [Transaction, setTransaction] = useState([]);
+  const [Filter, setFilter] = useState("all");
+  const [Rate, setRate] = useState(0);
 
+  useEffect(() => {
+    RateConversion();
+  }, []);
+  async function RateConversion() {
+    const response = await fetch("https://open.er-api.com/v6/latest/USD");
+    const result = await response.json();
+    setRate(result.rates.INR);
+  }
   function AddIncome() {
+    let numericAmount = Number(amount);
+    let convertedAmount = numericAmount;
+
+    if (currency === "USD") {
+      convertedAmount = numericAmount * Rate;
+    }
     const obj = {
       id: Date.now(),
       Title: description,
       currencyType: currency,
       type: incometype,
-      TransactionAmount: Number(amount),
+      TransactionAmount: convertedAmount,
     };
     console.log(obj);
 
     setTransaction([...Transaction, obj]);
-    setIncomeType("")
+    setIncomeType("");
     setAmount("");
     setCurrency("");
     setDescription("");
@@ -39,35 +55,40 @@ const Calculator = () => {
 
   const totalBalance = totalIncome - totalExpense;
 
+  const FilteredTransactions =
+    Filter === "all"
+      ? Transaction
+      : Transaction.filter((obj) => obj.currencyType === Filter);
+
   return (
     <div className="Container">
-      <h1>budget Tracker</h1>
-      <p>Track your income and expenses in multiple currencies</p>
+      <h1>BUDGET TRACKER</h1>
+      <p>Keep Track your income and expenses in multiple currencies</p>
       <div className="Header">
         <h2>Balance overview (ALL amounts in INR)</h2>
         <p>
           1 USD = <MdCurrencyRupee />
-          92.70 INR
+          {Rate.toFixed(2)} INR
         </p>
         <h2 className="Total_balance">
           Total Balance:
           <p>
             <MdCurrencyRupee />
-            {totalBalance}
+            {totalBalance.toFixed(2)}
           </p>
         </h2>
         <h3 className="Total_income">
           Total Income:
           <p>
             <MdCurrencyRupee />
-            {totalIncome}
+            {totalIncome.toFixed(2)}
           </p>
         </h3>
         <h4 className="Total_expense">
           Total Expenses:
           <p>
             <MdCurrencyRupee />
-            {totalExpense}
+            {totalExpense.toFixed(2)}
           </p>
         </h4>
       </div>
@@ -88,15 +109,12 @@ const Calculator = () => {
           </select>
           <label htmlFor="">Currency:</label>
           <select
-            name=""
-            id=""
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
           >
             <option value="">Select Currency</option>
 
             <option value="INR">
-            
               <MdCurrencyRupee />
               INR- Indian Rupee
             </option>
@@ -127,27 +145,28 @@ const Calculator = () => {
         <div className="Transaction_history">
           <h1>Transaction History</h1>
           <div className="Buttons">
-            <button>All</button>
-            <button>$USD</button>
-            <button>
+            <button onClick={() => setFilter("all")}>All</button>
+            <button onClick={() => setFilter("USD")}>$USD</button>
+            <button onClick={() => setFilter("INR")}>
               <MdCurrencyRupee />
               INR
             </button>
           </div>
-          {Transaction.map((obj) => {
+          {FilteredTransactions.map((obj) => {
             return (
-              <div>
-                <span>{obj.Title}</span>
-                <span>{obj.currencyType}</span>
+              <div key={obj.id} className="transactionRow">
+                <div className="leftPart">
+                  <span className="title">{obj.Title}</span>
+                  <span className="currencyTag">{obj.currencyType}</span>
+                </div>
                 <span
-                  style={{
-                    color: obj.type === "income" ? "green" : "red",
-                    fontWeight: "bold",
-                  }}
+                  className={
+                    obj.type === "income" ? "amountGreen" : "amountRed"
+                  }
                 >
                   {obj.type === "income" ? "+" : "-"}
                   <MdCurrencyRupee />
-                  {obj.TransactionAmount}
+                  {obj.TransactionAmount.toFixed(2)}
                 </span>
               </div>
             );
