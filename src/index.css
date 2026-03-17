@@ -66,9 +66,8 @@ body {
 .Total_balance {
   border-left: 5px solid #38bdf8;
   color: #38bdf8;
-
 }
-.Total_balance p{
+.Total_balance p {
   color: #38bdf8;
 }
 
@@ -137,7 +136,7 @@ body {
 }
 
 .AddExpense:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(167, 139, 250, 0.5);
 }
 
@@ -158,6 +157,7 @@ body {
   border-radius: 12px;
   width: fit-content;
   margin-bottom: 18px;
+  gap: 10px;
 }
 
 .Buttons button {
@@ -171,7 +171,7 @@ body {
   transition: 0.25s;
 }
 
-.Buttons button:hover {
+.Buttons button.activeBtn {
   background: linear-gradient(90deg, #a78bfa, #f472b6);
   color: white;
 }
@@ -185,7 +185,6 @@ body {
   background: rgba(255, 255, 255, 0.03);
   border-left: 4px solid #38bdf8;
 }
-
 
 .leftPart {
   display: flex;
@@ -217,23 +216,114 @@ body {
   font-weight: bold;
   font-size: 16px;
 }
+
 .RemoveBtn{
-   color: #ef4444;  
-   font-size: 17px;
-}
-.Transaction_history::-webkit-scrollbar{
-  width:8px;
-}
-
-.Transaction_history::-webkit-scrollbar-track{
-  background:transparent;   
+  font-size:20px;
+  color:#ef4444;
+  cursor:pointer;
+  transition:0.3s ease;
 }
 
-.Transaction_history::-webkit-scrollbar-thumb{
-  background: linear-gradient(180deg,#38bdf8,#a78bfa);
-  border-radius:10px;
+.RemoveBtn:hover{
+  transform:scale(1.2);
 }
 
-.Transaction_history::-webkit-scrollbar-thumb:hover{
-  background: linear-gradient(180deg,#22d3ee,#9333ea);
+.Transaction_history::-webkit-scrollbar {
+  width: 8px;
+}
+
+.Transaction_history::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.Transaction_history::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #38bdf8, #a78bfa);
+  border-radius: 10px;
+}
+
+.Transaction_history::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #22d3ee, #9333ea);
+}
+
+@media (max-width: 768px) {
+  .Container {
+    width: 95%;
+    padding: 20px 10px;
+  }
+
+  .Transaction_box {
+    flex-direction: column;
+  }
+
+  .Add_transaction,
+  .Transaction_history {
+    width: 100%;
+  }
+
+  .Total_balance,
+  .Total_income,
+  .Total_expense {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .Buttons {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .Buttons button {
+    flex: 1;
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .transactionRow {
+    padding: 10px;
+  }
+
+  .title {
+    font-size: 14px;
+  }
+
+  .amountGreen,
+  .amountRed {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Container h1 {
+    font-size: 24px;
+  }
+
+  .Container p {
+    font-size: 13px;
+  }
+
+  .Add_transaction input,
+  .Add_transaction select {
+    padding: 9px;
+    font-size: 14px;
+  }
+
+  .AddExpense {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .transactionRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .leftPart {
+    width: 100%;
+  }
+
+  .amountGreen,
+  .amountRed {
+    align-self: flex-end;
+  }
 }

@@ -154,11 +154,25 @@ const Calculator = () => {
         <div className="Transaction_history">
           <h1>Transaction History</h1>
           <div className="Buttons">
-            <button onClick={() => setFilter("all")}>All</button>
-            <button onClick={() => setFilter("USD")}>$USD</button>
-            <button onClick={() => setFilter("INR")}>
-              <MdCurrencyRupee />
-              INR
+            <button
+              className={Filter === "all" ? "activeBtn" : ""}
+              onClick={() => setFilter("all")}
+            >
+              All
+            </button>
+
+            <button
+              className={Filter === "USD" ? "activeBtn" : ""}
+              onClick={() => setFilter("USD")}
+            >
+              $USD
+            </button>
+
+            <button
+              className={Filter === "INR" ? "activeBtn" : ""}
+              onClick={() => setFilter("INR")}
+            >
+              <MdCurrencyRupee /> INR
             </button>
           </div>
           {FilteredTransactions.map((obj) => {
@@ -177,7 +191,10 @@ const Calculator = () => {
                   <MdCurrencyRupee />
                   {obj.TransactionAmount.toFixed(2)}
                 </span>
-                <GiCancel onClick={() => DeleteTransaction(obj.id)} className="RemoveBtn" />
+                <GiCancel
+                  onClick={() => DeleteTransaction(obj.id)}
+                  className="RemoveBtn"
+                />
               </div>
             );
           })}
