@@ -1,8 +1,13 @@
 import React from "react";
 import { MdCurrencyRupee } from "react-icons/md";
 import { ImCancelCircle } from "react-icons/im";
-
-const TransactionList = ({ filterTransaction, setFilter, DeleteTrans, activeFilter }) => {
+import "./TransactionList.css"
+const TransactionList = ({
+  filterTransaction,
+  setFilter,
+  DeleteTrans,
+  activeFilter,
+}) => {
   return (
     <div className="Transaction_history">
       <h1>Transaction History</h1>
@@ -23,29 +28,53 @@ const TransactionList = ({ filterTransaction, setFilter, DeleteTrans, activeFilt
           className={activeFilter === "INR" ? "filter-active" : ""}
           onClick={() => setFilter("INR")}
         >
-          <MdCurrencyRupee />INR
+          <MdCurrencyRupee />
+          INR
         </button>
       </div>
 
-      {filterTransaction.length === 0 && (
-        <p style={{ color: "#6b7280", textAlign: "center", marginTop: "20px" }}>
-          No transactions found.
-        </p>
-      )}
+      <div className="transaction-scroll">
+        {filterTransaction.length === 0 && (
+          <p
+            style={{
+              color: "var(--text-muted)",
+              textAlign: "center",
+              marginTop: "20px",
+              fontSize: "0.875rem",
+            }}
+          >
+            No transactions found.
+          </p>
+        )}
+        {filterTransaction.map((obj) => (
+          <div key={obj.id} className="transaction-item">
+            <div className="top_row">
+              <span className="transaction-title">{obj.Title}</span>
 
-      {filterTransaction.map((obj) => (
-        <div key={obj.id}>
-          <span>{obj.Title}</span>
-          <span style={{ color: "#9ca3af", fontSize: "13px" }}>{obj.category}</span>
-          <span style={{ color: "#6b7280", fontSize: "13px" }}>{obj.currencyType}</span>
-          <span style={{ color: obj.type === "income" ? "#22c55e" : "#ef4444", fontWeight: "bold" }}>
-            {obj.type === "income" ? "+" : "-"}
-            <MdCurrencyRupee />
-            {obj.TransactionAmount.toFixed(2)}
-          </span>
-          <ImCancelCircle onClick={() => DeleteTrans(obj.id)} className="Deletebtn" />
-        </div>
-      ))}
+              <span className="tag category">{obj.category}</span>
+
+              <div className="right_section">
+                <span
+                  className={`amount ${obj.type === "income" ? "green" : "red"}`}
+                >
+                  {obj.type === "income" ? "+" : "-"}
+                  <MdCurrencyRupee />
+                  {obj.TransactionAmount.toFixed(2)}
+                </span>
+
+                <ImCancelCircle
+                  onClick={() => DeleteTrans(obj.id)}
+                  className="Deletebtn"
+                />
+              </div>
+            </div>
+
+            <div className="bottom_row">
+              <span className="tag currency">{obj.currencyType}</span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

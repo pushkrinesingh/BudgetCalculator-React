@@ -1,0 +1,123 @@
+
+.Transaction_box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.Add_transaction {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.Add_transaction h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.4rem;
+}
+.Add_transaction label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+.Add_transaction select,
+.Add_transaction input[type="number"],
+.Add_transaction input[type="text"] {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+  appearance: none;
+}
+.Add_transaction select:focus,
+.Add_transaction input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.Add_transaction select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+.Add_transaction input[type="number"]::-webkit-inner-spin-button,
+.Add_transaction input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+.transaction_type {
+  width: 100%;
+}
+
+.transaction_toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.currency_toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.toggle_btn {
+  flex: 1;
+  padding: 10px;
+  border: 2px solid #ccc;
+  color: white;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.toggle_btn:hover {
+  border-color: #007bff;
+}
+
+.toggle_btn.active {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.AddExpense {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.6rem;
+  background: linear-gradient(135deg, var(--accent), #2563eb);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.AddExpense:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  filter: brightness(1.1);
+}
+.AddExpense:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}

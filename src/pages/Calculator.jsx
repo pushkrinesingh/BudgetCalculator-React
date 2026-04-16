@@ -1,25 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth ,db} from "../../firebase";
-import { categories } from "../Components/CategorySelector";
-
+import { auth, db } from "../../firebase";
 import Header from "../Components/Header";
 import AddTransaction from "../Components/AddTransaction";
 import TransactionList from "../Components/TransactionList";
-import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
-import { deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where, deleteDoc, doc } from "firebase/firestore";
 
 const Calculator = ({ transactions, setTransactions, user, setUser }) => {
   const [incometype, setIncomeType] = useState("");
-  const [currency, setCurrency] = useState("");
+  const [currency, setCurrency] = useState("INR");
   const [amount, setAmount] = useState("");
   const [description, setDescription] = useState("");
   const [UsdRate, setUsdRate] = useState(0);
   const [Filter, setFilter] = useState("All");
   const [category, setCategory] = useState("");
   const [loading, setLoading] = useState(true);
-
 
   useEffect(() => {
     CurrConversion();
@@ -30,86 +26,70 @@ const Calculator = ({ transactions, setTransactions, user, setUser }) => {
       setUser(u);
       setLoading(false);
     });
-
     return () => unsubscribe();
   }, []);
 
   useEffect(() => {
     if (!user) return;
-
     const fetchData = async () => {
-      const q = query(
-        collection(db, "transactions"),
-        where("userId", "==", user.uid),
-      );
-
+      const q = query(collection(db, "transactions"), where("userId", "==", user.uid));
       const snapshot = await getDocs(q);
-
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
+      const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
       setTransactions(data);
     };
-
     fetchData();
   }, [user]);
 
   if (loading) return <h2>Loading...</h2>;
 
   async function CurrConversion() {
-    const response = await fetch("https://open.er-api.com/v6/latest/USD");
-    const result = await response.json();
-    setUsdRate(result.rates.INR);
+    try {
+      const response = await fetch("https://open.er-api.com/v6/latest/USD");
+      const result = await response.json();
+      setUsdRate(result.rates.INR);
+    } catch (err) {
+      console.error("Failed to fetch USD rate:", err);
+    }
   }
 
   async function AddIncome() {
-  if (!user) {
-    alert("Please login first 🔐");
-    return;
+    if (!user) { alert("Please login first 🔐"); return; }
+    if (!incometype) { alert("Please select a transaction type"); return; }
+    if (!currency) { alert("Please select a currency"); return; }
+    if (!amount || Number(amount) <= 0) { alert("Please enter a valid amount"); return; }
+    if (!description.trim()) { alert("Please enter a description"); return; }
+
+    let convertedAmount = Number(amount);
+    if (currency === "USD") {
+      if (!UsdRate) { alert("USD rate unavailable. Please refresh and try again."); return; }
+      convertedAmount = Number(amount) * UsdRate;
+    }
+    convertedAmount = Math.round(convertedAmount * 100) / 100;
+
+    const obj = {
+      Title: description.trim(),
+      currencyType: currency,
+      type: incometype,
+      TransactionAmount: convertedAmount,
+      category: category || "Other",
+      userId: user.uid,
+    };
+
+    const docRef = await addDoc(collection(db, "transactions"), obj);
+    setTransactions((prev) => [...prev, { ...obj, id: docRef.id }]);
+
+    setIncomeType("");
+    setCurrency("INR");
+    setAmount("");
+    setDescription("");
+    setCategory("");
   }
-
-  let ConvertedAmout = Number(amount);
-
-  if (currency === "USD") {
-    ConvertedAmout = Number(amount) * UsdRate;
-  }
-
-  ConvertedAmout = Math.round(ConvertedAmout * 100) / 100;
-  const obj = {
-    Title: description,
-    currencyType: currency,
-    type: incometype,
-    TransactionAmount: ConvertedAmout,
-    category: category,
-    
-    userId: user.uid,
-  };
-
-  const docRef = await addDoc(collection(db, "transactions"), obj);
-
-  const newObj = {
-    ...obj,
-    id: docRef.id, 
-  };
-
-  setTransactions((prev) => [...prev, newObj]); 
-
-  setIncomeType("");
-  setCurrency("");
-  setAmount("");
-  setDescription("");
-  setCategory("");
-}
 
   const totalIncome = transactions.reduce(
-    (acc, obj) => (obj.type === "income" ? acc + obj.TransactionAmount : acc),
-    0,
+    (acc, obj) => (obj.type === "income" ? acc + obj.TransactionAmount : acc), 0
   );
   const totalExpense = transactions.reduce(
-    (acc, obj) => (obj.type === "expense" ? acc + obj.TransactionAmount : acc),
-    0,
+    (acc, obj) => (obj.type === "expense" ? acc + obj.TransactionAmount : acc), 0
   );
   const totalBalance = totalIncome - totalExpense;
 
@@ -119,21 +99,14 @@ const Calculator = ({ transactions, setTransactions, user, setUser }) => {
       : transactions.filter((obj) => obj.currencyType === Filter);
 
   async function DeleteTrans(id) {
-  try {
-    // if (typeof id !== "string") {
-    //   alert("Old invalid transaction ❌ delete from Firebase manually");
-    //   return;
-    // }
-
-    await deleteDoc(doc(db, "transactions", id));
-
-    setTransactions((prev) =>
-      prev.filter((item) => item.id !== id)
-    );
-  } catch (error) {
-    console.error("Delete error:", error);
+    try {
+      await deleteDoc(doc(db, "transactions", id));
+      setTransactions((prev) => prev.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Delete error:", error);
+      alert("Failed to delete transaction");
+    }
   }
-}
 
   return (
     <div className="Container">

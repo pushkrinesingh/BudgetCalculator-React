@@ -21,7 +21,7 @@ const Navbar = ({ user, setUser, setTransactions }) => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand"><Link to="/dashboard"><GiWallet size={20} color="white"/> Expenso</Link></div>
+      <div className="navbar-brand"><Link to="/dashboard"><GiWallet/> Budget Tracker </Link></div>
       <div className="navbar-links">
         
         <Link to="/analytics" className={`nav-link ${location.pathname === "/analytics" ? "active" : ""}`}>

@@ -1,0 +1,148 @@
+
+.Transaction_history {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.6rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.Transaction_history h1 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+.Buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+.Buttons button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.Buttons button:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-primary);
+  border-color: var(--border-light);
+}
+.Buttons button.filter-active {
+  background: var(--accent-glow);
+  border-color: rgba(59, 130, 246, 0.4);
+  color: var(--accent-hover);
+  font-weight: 600;
+}
+
+.transaction-scroll {
+  overflow-y: auto;
+  max-height: 420px;
+  padding-right: 4px;
+}
+
+.transaction-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  padding: 0.75rem 0.9rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+
+.transaction-item:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+}
+
+.top_row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.transaction-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  justify-self: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category {
+  justify-self: center;
+  color: #60a5fa;
+}
+
+.amount {
+  justify-self: end;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.amount.green {
+  color: var(--green);
+}
+
+.amount.red {
+  color: var(--red);
+}
+
+.bottom_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tag {
+  padding: 3px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+}
+
+.currency {
+  color: #fbbf24;
+}
+
+.right_section {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+}
+
+.Deletebtn {
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.Deletebtn:hover {
+  color: var(--red);
+  transform: scale(1.1);
+}

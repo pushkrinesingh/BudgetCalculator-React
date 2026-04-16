@@ -9,6 +9,7 @@ import {
   FaGift,
   FaMoneyBill,
 } from "react-icons/fa";
+import "./CategorySelector.css"
 
 export const categories = [
   { name: "Food", icon: <FaUtensils /> },

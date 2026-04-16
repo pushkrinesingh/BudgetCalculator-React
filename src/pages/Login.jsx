@@ -126,7 +126,7 @@ const Login = () => {
             {loading
               ? "Please wait..."
               : isLogin
-              ? "Sign in"
+              ? "Login"
               : "Create account"}
           </button>
         </form>
